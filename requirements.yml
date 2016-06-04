@@ -1,0 +1,7 @@
+- src: geerlingguy.repo-epel
+- src: geerlingguy.repo-remi
+- src: geerlingguy.ntp
+- src: geerlingguy.composer
+- src: geerlingguy.apache
+- src: geerlingguy.php
+- src: geerlingguy.mysql

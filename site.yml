@@ -1,0 +1,45 @@
+---
+- hosts: all
+  become: yes
+  vars:
+    app_name: myapp
+    php_packages:
+      - php
+      - php-cli
+      - php-common
+      - php-devel
+      - php-fpm
+      - php-gd
+      - php-ldap
+      - php-mbstring
+      - php-pdo
+      - php-pear
+      - php-xml
+      - php-xmlrpc
+      - php-mysql
+    apache_vhosts:
+      - servername: "local.dev"
+        documentroot: "/var/www/{{app_name}}/html"
+    mysql_databases:
+      - name: "{{app_name}}_db"
+        collation: utf8_general_ci
+        encoding: utf8
+        replicate: 1
+    mysql_users:
+      - name: "{{app_name}}_db_user"
+        host: '%'
+        password: password
+        priv: '*.*:ALL'
+  roles:
+    - { role: geerlingguy.ntp }
+    - { role: geerlingguy.repo-epel }
+    - { role: geerlingguy.repo-remi }
+    - { role: geerlingguy.apache }
+    - { role: geerlingguy.php }
+    - { role: geerlingguy.composer }
+    - { role: geerlingguy.mysql }
+  tasks:
+    - name: SELinuxのDisable設定
+      selinux: state=disabled
+    - name: Apacheユーザーをvagrantグループに追加
+      user: name=apache groups=vagrant append=yes
